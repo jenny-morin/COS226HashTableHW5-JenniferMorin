@@ -9,7 +9,8 @@ import time
 #Linear probing, if full insert in next avaiable spot(could loop back to the top)
     #Stop searching when you find an empty spot
 #Linked list when a collide happens you append it 
-size = 59494 
+#size = 59494 
+size=4347430
 hashTable = [None] * size
 # x=0
 # biggest = 0
@@ -31,30 +32,33 @@ class DataItem:
 
 
 def hashFunction(mydata):
-    
     ascii_values=[]
-    for char in mydata.movie_name:
+    #for char in mydata.movie_name:
+    for char in mydata.quote:
         ascii_values += [ord(char)]
     key = 0
     for i in ascii_values:
         key+=i
-    # if x==0:
-    #     biggest = key
-    #     x+=1
-    # elif key > biggest:
-    #     biggest = key
-    return key#,x,biggest
-    #print(key) 
-    #print(ascii(mydata.movie_name))
+    return key
+
 def hashInsert(key, mydata,collision,itemsPlaced):
     if hashTable[key] == None:
         hashTable[key]= mydata
-        #print(hashTable[key])
+        itemsPlaced+=1
     else:
-        #print("I am not adding anythinggg")
-        collision=hashCollision(key,mydata,collision)
-    itemsPlaced+=1
+        collision=hashCollisionLinked(key,mydata,collision)
+    #itemsPlaced+=1
     return collision,itemsPlaced
+
+def hashCollisionLinked(key,mydata,collision):
+    if(type(hashTable[key])==list):
+        hashTable[key].append(mydata)
+    else:
+        currKey = hashTable[key]
+        temp=[currKey,mydata]
+        hashTable[key]=temp
+    collision+=1
+    return collision
 
 def hashCollision(key,mydata,collision):
     ogKey=key
@@ -65,9 +69,7 @@ def hashCollision(key,mydata,collision):
             print("Full")
             return
         currKey = hashTable[key]
-    #print("put her there")
     hashTable[key]=mydata
-    #hashInsert(key,mydata)
     collision+=1
     return collision
 
@@ -77,27 +79,19 @@ start = time.time()
 with open(file, 'r', newline='', encoding ="utf8") as csvfile:
     reader = csv.reader(csvfile)
     for row in reader:
-        #print(row)
         if lineCounter != 0:
-        #create a DataItem from row
             myDataItem = DataItem(row)
-            # titleKey,x,biggest = hashFunction(myDataItem,x,biggest)
             titleKey= hashFunction(myDataItem)
-            #print(titleKey)
             collision,itemsPlaced=hashInsert(titleKey,myDataItem,collision,itemsPlaced)
-        #print(biggest)
-            
-        #feed the appropriate feild into the hash function to get a key
-        #mod the key value by the hash table length
-        #try to insert DataItem into hash table
-        #handle any collisions
         lineCounter+=1
 end = time.time()
-print(f"Lines read: {lineCounter}")
-print(f"Items added: {itemsPlaced}")
-print(f"Collisions handled: {collision}")
-print(f"Empty spots remaining: {size-itemsPlaced}")
-print(f"Time used: {end-start:0.2f} seconds")
+
+print(f"\n---Hash Table using the movie quotes---")
+print(f"\tLines read: {lineCounter}")
+print(f"\tItems added: {lineCounter-1}")
+print(f"\tCollisions handled: {collision}")
+print(f"\tEmpty spots remaining: {size-itemsPlaced}")
+print(f"\tTime used: {end-start:0.2f} seconds\n")
 
 #handle collision function that decides on a new key value or adds it as the linked list
 
