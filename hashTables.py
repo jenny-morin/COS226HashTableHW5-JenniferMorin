@@ -1,3 +1,7 @@
+#Jennifer Morin
+#COS226
+#Hash Function HW 5
+
 import csv as csv
 import time
 #Hash Function- create a good method
