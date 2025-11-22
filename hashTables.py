@@ -10,7 +10,7 @@ import time
     #Stop searching when you find an empty spot
 #Linked list when a collide happens you append it 
 #size = 59494 
-size=4347430
+size=8500
 hashTable = [None] * size
 # x=0
 # biggest = 0
@@ -33,12 +33,13 @@ class DataItem:
 
 def hashFunction(mydata):
     ascii_values=[]
-    #for char in mydata.movie_name:
-    for char in mydata.quote:
+    for char in mydata.movie_name:
+    #for char in mydata.quote:
         ascii_values += [ord(char)]
     key = 0
     for i in ascii_values:
         key+=i
+    key = key//7
     return key
 
 def hashInsert(key, mydata,collision,itemsPlaced):
@@ -86,7 +87,7 @@ with open(file, 'r', newline='', encoding ="utf8") as csvfile:
         lineCounter+=1
 end = time.time()
 
-print(f"\n---Hash Table using the movie quotes---")
+print(f"\n---Hash Table using the movie titles---")
 print(f"\tLines read: {lineCounter}")
 print(f"\tItems added: {lineCounter-1}")
 print(f"\tCollisions handled: {collision}")
