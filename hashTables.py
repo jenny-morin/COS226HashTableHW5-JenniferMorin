@@ -10,7 +10,7 @@ import time
     #Stop searching when you find an empty spot
 #Linked list when a collide happens you append it 
 #size = 59494 
-size=8500
+size=621062
 hashTable = [None] * size
 # x=0
 # biggest = 0
@@ -33,7 +33,7 @@ class DataItem:
 
 def hashFunction(mydata):
     ascii_values=[]
-    for char in mydata.movie_name:
+    for char in mydata.quote:
     #for char in mydata.quote:
         ascii_values += [ord(char)]
     key = 0
@@ -45,10 +45,10 @@ def hashFunction(mydata):
 def hashInsert(key, mydata,collision,itemsPlaced):
     if hashTable[key] == None:
         hashTable[key]= mydata
-        itemsPlaced+=1
+        #itemsPlaced+=1
     else:
-        collision=hashCollisionLinked(key,mydata,collision)
-    #itemsPlaced+=1
+        collision=hashCollision(key,mydata,collision)
+    itemsPlaced+=1
     return collision,itemsPlaced
 
 def hashCollisionLinked(key,mydata,collision):
@@ -58,11 +58,13 @@ def hashCollisionLinked(key,mydata,collision):
         currKey = hashTable[key]
         temp=[currKey,mydata]
         hashTable[key]=temp
+    
     collision+=1
     return collision
 
 def hashCollision(key,mydata,collision):
     ogKey=key
+    print(key)
     currKey = hashTable[key]
     while currKey != None:
         key += 1
@@ -70,6 +72,7 @@ def hashCollision(key,mydata,collision):
             print("Full")
             return
         currKey = hashTable[key]
+    print(key)
     hashTable[key]=mydata
     collision+=1
     return collision
@@ -87,7 +90,7 @@ with open(file, 'r', newline='', encoding ="utf8") as csvfile:
         lineCounter+=1
 end = time.time()
 
-print(f"\n---Hash Table using the movie titles---")
+print(f"\n---Hash Table using the movie quotes---")
 print(f"\tLines read: {lineCounter}")
 print(f"\tItems added: {lineCounter-1}")
 print(f"\tCollisions handled: {collision}")
